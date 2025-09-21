@@ -14,4 +14,6 @@ Host github-task-system
   IdentityFile ~/.ssh/github_task_organized_system
   IdentitiesOnly yes
 
+# 查看公钥
+cat ~/.ssh/github_task_organized_system.pub
  ### ctrl x保存，公钥发给我
