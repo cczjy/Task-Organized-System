@@ -85,7 +85,7 @@ async function init_group_DB() {
         FOREIGN KEY (id) REFERENCES Person(id)
       );
     `);
-    //vote需要好几把多表好几把复杂我后面再写
+    //vote表没写完
     
     //message_users表
     await client.query(`
@@ -126,3 +126,4 @@ async function init_group_DB() {
 }
 
 init_system_DB();
+init_group_DB()
