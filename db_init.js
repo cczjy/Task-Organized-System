@@ -63,8 +63,8 @@ async function init_group_DB() {
         group_id INT NOT NULL,
         sender_id INT NOT NULL,
         create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        FOREIGN KEY (group_id) REFERENCES Groups(group_id),
-        FOREIGN KEY (sender_id) REFERENCES Users(user_id)
+        FOREIGN KEY (group_id) REFERENCES groups(group_id),
+        FOREIGN KEY (sender_id) REFERENCES users(user_id)
       );
     `);
         // tasks 表
@@ -74,7 +74,7 @@ async function init_group_DB() {
         ddl TIMESTAMP NOT NULL
         filename VARCHAR(255),
         file_path VARCHAR(500),
-        FOREIGN KEY (id) REFERENCES Person(id)
+        FOREIGN KEY (id) REFERENCES users(id)
       );
     `);
         //votes表
@@ -82,10 +82,10 @@ async function init_group_DB() {
       CREATE TABLE IF NOT EXISTS votes (
         id INT PRIMARY KEY,
         ddl TIMESTAMP NOT NULL,
-        FOREIGN KEY (id) REFERENCES Person(id)
+        FOREIGN KEY (id) REFERENCES users(id)
       );
     `);
-    //vote表没写完
+    //vote需要好几把多表好几把复杂我后面再写
     
     //message_users表
     await client.query(`
@@ -94,8 +94,8 @@ async function init_group_DB() {
         user_id INT,
         status VARCHAR(20), -- 已读、未读
         PRIMARY KEY (message_id, user_id),
-        FOREIGN KEY (message_id) REFERENCES Message(id),
-        FOREIGN KEY (user_id) REFERENCES Users(id)
+        FOREIGN KEY (message_id) REFERENCES message(id),
+        FOREIGN KEY (user_id) REFERENCES users(id)
       );
     `);
     //task_users表
@@ -110,7 +110,7 @@ async function init_group_DB() {
         file_path VARCHAR(500),
         PRIMARY KEY (message_id, user_id),
         FOREIGN KEY (message_id) REFERENCES Message(id),
-        FOREIGN KEY (user_id) REFERENCES Users(id)
+        FOREIGN KEY (user_id) REFERENCES users(id)
       );
     `);
 
@@ -126,4 +126,4 @@ async function init_group_DB() {
 }
 
 init_system_DB();
-init_group_DB()
+init_group_DB();
