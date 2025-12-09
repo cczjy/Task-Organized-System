@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            background-image: url('1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-header {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 48px;
+            width: 92%;
+            max-width: 560px;
+            min-height: 380px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+               .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, 
+                        rgba(255, 255, 255, 0.6) 0%,
+                        rgba(255, 255, 255, 0.2) 25%,
+                        rgba(255, 255, 255, 0.1) 50%,
+                        rgba(255, 255, 255, 0.2) 75%,
+                        rgba(255, 255, 255, 0.6) 100%);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            z-index: -1;
+        }
+
+        .user-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 182, 193, 0.8);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #4A90E2;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .form-group label {
+            color: #333;
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .form-group input:focus {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .links a {
+            color: #4A90E2;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #357ABD;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 50%;
+            padding: 15px;
+            background: rgba(255, 182, 193, 0.8);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px auto 0;
+            display: block;
+        }
+
+        .login-btn:hover {
+            background: rgba(255, 182, 193, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .login-header {
+                top: 20px;
+                left: 20px;
+                font-size: 20px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+                min-height: auto;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .form-group label {
+                min-width: auto;
+            }
+            
+            .form-group input {
+                width: 100%;
+            }
+            
+            .small-avatar {
+                position: static;
+                transform: none;
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-header">Login</div>
+    
+    <div class="container">
+        <div class="user-icon">👤</div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="account">Account</label>
+                <input type="text" id="account" name="account" placeholder="Please input your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Please input your password">
+            </div>
+            
+            <div class="links">
+                <a href="PasswordChanges.html">Change password</a>
+                <a href="Register.html">Register</a>
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+    </div>
+
+ <script src="config.js"></script>
+ <script>
+    (function () {
+        var form = document.getElementById('login-form');
+
+        function isEmailValid(value) {
+            if (!value) return false;
+            if (value.length < 5) return false;
+            if (value.indexOf('@') === -1) return false;
+            return true;
+        }
+
+        // 清除所有缓存数据
+        function clearAllCache() {
+            try {
+                localStorage.removeItem('userId');
+                localStorage.removeItem('workspaces');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('username');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userIntroduction');
+                console.log('所有缓存数据已清除');
+            } catch (e) {
+                console.error('清除缓存失败:', e);
+            }
+        }
+
+        // 页面加载时清除缓存（确保每次打开登录页都是全新状态）
+        clearAllCache();
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var email = (document.getElementById('account').value || '').trim();
+            var password = document.getElementById('password').value || '';
+            if (!isEmailValid(email)) {
+                alert('Email is invalid.');
+                return;
+            }
+            if (!password) {
+                alert('Password is required.');
+                return;
+            }
+            var body = new URLSearchParams();
+            body.set('email', email);
+            body.set('password', password);
+
+            fetch(getApiUrl(API_ENDPOINTS.USER_LOGIN), {
+                method: 'POST',
+                body: body
+            })
+            .then(function (res) { return res.json().then(function (d){ return { ok: res.ok, status: res.status, data: d }; }); })
+            .then(function (r) {
+                if (r.ok) {
+                    // 登录成功前再次确保清除旧缓存
+                    clearAllCache();
+                    
+                    alert(r.data.message || '登录成功');
+                    // 存储新的userId和workspaces到localStorage
+                    if (r.data.userId) {
+                        localStorage.setItem('userId', r.data.userId);
+                    }
+                    if (r.data.workspaces) {
+                        localStorage.setItem('workspaces', JSON.stringify(r.data.workspaces));
+                    }
+                    // 存储完整的用户数据
+                    if (r.data) {
+                        const userData = {
+                            userId: r.data.userId,
+                            username: r.data.username,
+                            email: r.data.email,
+                            introduction: r.data.introduction,
+                            workspaces: r.data.workspaces,
+                            password: password // 存储密码用于自动刷新
+                        };
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                    }
+                    location.href = 'Dashboard.html';
+                } else {
+                    alert(r.data.error || '登录失败：邮箱或密码不正确');
+                }
+            })
+            .catch(function () {
+                alert('Network error.');
+            });
+        });
+    })();
+</script>
+</body>
+</html>

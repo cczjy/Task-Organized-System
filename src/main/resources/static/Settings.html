@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            transition: background-color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            z-index: 1000;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 左侧边栏 - 固定展开 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background-color: #f8f9fa;
+            z-index: 1001;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-content {
+            padding: 80px 20px 20px 20px; /* 顶部留出空间给header */
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .nav-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background-color: white;
+            margin-bottom: 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: #007bff;
+        }
+
+        .group-list {
+            list-style: none;
+        }
+
+        .group-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .group-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .group-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .group-icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        /* 新增群组按钮样式 */
+        .add-group-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            background: #87ceeb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-top: 0;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .add-group-btn:hover {
+            background: #6bb6d6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(135, 206, 235, 0.4);
+        }
+
+        .add-icon {
+            font-size: 16px;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            margin-top: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* 用户信息展示板块 */
+        .user-profile-section {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #007bff;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .user-email {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* 个人信息修改板块 */
+        .personal-info-section {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            min-width: 100px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #666;
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .edit-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* 登出板块 */
+        .logout-section {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            padding: 15px 30px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+            color: #666;
+        }
+
+        .modal-close:hover {
+            background-color: #f0f0f0;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-body .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .modal-body input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .modal-body input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-cancel,
+        .btn-submit {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background-color: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .code-btn {
+            white-space: nowrap;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(74, 144, 226, 0.9);
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .code-btn:disabled {
+            background: rgba(74, 144, 226, 0.4);
+            cursor: not-allowed;
+        }
+
+        .form-group-with-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group-with-btn input {
+            flex: 1;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .user-profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .info-value {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <span class="header-title">Account Settings</span>
+    </header>
+
+    <div class="container">
+        <!-- 左侧边栏 -->
+        <nav class="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        <!-- <span>🏠</span>
+                        <span>Home</span> -->
+                    </div>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item" onclick="goToDashboard()">
+                        <span class="nav-icon" title="首页">🏠</span>
+                        <span>Home</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-icon">🔽</span>
+                        <span>Filter</span>
+                    </li>
+                    <li class="nav-item" onclick="goToMessagePage()">
+                        <span class="nav-icon">📦</span>
+                        <span>Message box</span>
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <span style="font-weight: 600; color: #333; font-size: 14px;">Group</span>
+                    <button class="add-group-btn" onclick="showAddGroupModal()">
+                        <span class="add-icon">➕</span>
+                    </button>
+                </div>
+                <input type="text" class="search-box" placeholder="🔍 Find a group">
+                <ul class="group-list" id="sidebarGroupList">
+                    <!-- 群组列表将在这里动态生成 -->
+                </ul>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <h1 class="main-title">Account Settings</h1>
+            
+            <!-- 用户信息展示板块 -->
+            <div class="user-profile-section">
+                <img src="1.jpg" alt="User Avatar" class="user-avatar" id="userAvatar">
+                <div class="user-info">
+                    <div class="user-name" id="displayUserName">Loading...</div>
+                    <div class="user-email" id="displayUserEmail">Loading...</div>
+                </div>
+            </div>
+
+            <!-- 个人信息修改板块 -->
+            <div class="personal-info-section">
+                <h2 class="section-title">Personal Information</h2>
+                
+                <div class="info-item">
+                    <span class="info-label">Username</span>
+                    <span class="info-value" id="currentUsername">Loading...</span>
+                    <button class="edit-btn" onclick="showChangeUsernameModal()">Edit</button>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" id="currentEmail">Loading...</span>
+                    <button class="edit-btn" onclick="showChangeEmailModal()">Edit</button>
+                </div>
+            </div>
+
+            <!-- 登出板块 -->
+            <div class="logout-section">
+                <button class="logout-btn" onclick="logout()">Log out</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- 修改用户名弹窗 -->
+    <div class="modal-overlay" id="changeUsernameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>修改用户名</h3>
+                <button class="modal-close" onclick="hideChangeUsernameModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="changeUsernameForm">
+                    <div class="form-group">
+                        <label for="newUsername">新用户名</label>
+                        <input type="text" id="newUsername" name="newUsername" placeholder="请输入新用户名" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="hideChangeUsernameModal()">取消</button>
+                        <button type="submit" class="btn-submit">确认修改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增群组弹窗 -->
+    <div class="modal-overlay" id="addGroupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新增群组</h3>
+                <button class="modal-close" onclick="hideAddGroupModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="addGroupForm">
+                    <div class="form-group">
+                        <label for="groupName">群组名称</label>
+                        <input type="text" id="groupName" name="name" placeholder="请输入群组名称" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupDescription">群组描述</label>
+                        <textarea id="groupDescription" name="description" placeholder="请输入群组描述" rows="3" style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="hideAddGroupModal()">取消</button>
+                        <button type="submit" class="btn-submit">创建群组</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改邮箱弹窗 -->
+    <div class="modal-overlay" id="changeEmailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>修改邮箱</h3>
+                <button class="modal-close" onclick="hideChangeEmailModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="changeEmailForm">
+                    <div class="form-group">
+                        <label for="oldEmail">当前邮箱</label>
+                        <input type="email" id="oldEmail" name="oldEmail" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="newEmail">新邮箱</label>
+                        <input type="email" id="newEmail" name="newEmail" placeholder="请输入新邮箱" required>
+                    </div>
+                    <div class="form-group form-group-with-btn">
+                        <label for="verificationCode">验证码</label>
+                        <input type="text" id="verificationCode" name="verificationCode" placeholder="请输入验证码" required>
+                        <button type="button" id="getCodeBtn" class="code-btn">获取验证码</button>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="hideChangeEmailModal()">取消</button>
+                        <button type="submit" class="btn-submit">确认修改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userId = null;
+        let workspaces = [];
+        let timer = null;
+        let remain = 60;
+
+        // 缓存管理
+        const CacheManager = {
+            // 获取缓存数据
+            get(key) {
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : null;
+                } catch (e) {
+                    console.error('获取缓存失败:', e);
+                    return null;
+                }
+            },
+            
+            // 设置缓存数据
+            set(key, value) {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                    return true;
+                } catch (e) {
+                    console.error('设置缓存失败:', e);
+                    return false;
+                }
+            },
+            
+            // 获取完整的用户数据
+            getUserData() {
+                return this.get('userData');
+            },
+            
+            // 获取用户ID
+            getUserId() {
+                const userData = this.getUserData();
+                return userData ? userData.userId : this.get('userId');
+            },
+            
+            // 获取用户名
+            getUsername() {
+                const userData = this.getUserData();
+                return userData ? userData.username : this.get('username');
+            },
+            
+            // 获取用户邮箱
+            getUserEmail() {
+                const userData = this.getUserData();
+                return userData ? userData.email : this.get('userEmail');
+            },
+            
+            // 获取用户密码
+            getUserPassword() {
+                const userData = this.getUserData();
+                return userData ? userData.password : null;
+            },
+            
+            // 获取工作空间列表
+            getWorkspaces() {
+                const userData = this.getUserData();
+                return userData ? userData.workspaces : (this.get('workspaces') || []);
+            },
+            
+            // 更新完整用户数据
+            updateUserData(userData) {
+                this.set('userData', userData);
+                // 同时更新单独的字段
+                if (userData.userId) {
+                    this.set('userId', userData.userId);
+                }
+                if (userData.username) {
+                    this.set('username', userData.username);
+                }
+                if (userData.email) {
+                    this.set('userEmail', userData.email);
+                }
+                if (userData.workspaces) {
+                    this.set('workspaces', userData.workspaces);
+                }
+            },
+            
+            // 获取用户ID为Long类型（用于API调用）
+            getUserIdAsLong() {
+                const userId = this.getUserId();
+                if (userId) {
+                    // 如果userId是字符串，尝试转换为数字
+                    const numId = typeof userId === 'string' ? parseInt(userId, 10) : userId;
+                    return isNaN(numId) ? null : numId;
+                }
+                return null;
+            },
+            
+            // 添加新工作空间
+            addWorkspace(newWorkspace) {
+                const userData = this.getUserData();
+                if (userData) {
+                    if (!userData.workspaces) {
+                        userData.workspaces = [];
+                    }
+                    // 检查是否已存在相同ID的工作空间
+                    const exists = userData.workspaces.some(ws => ws.workspaceId === newWorkspace.workspaceId);
+                    if (!exists) {
+                        userData.workspaces.push(newWorkspace);
+                        this.updateUserData(userData);
+                    }
+                } else {
+                    // 如果没有userData，创建一个新的
+                    const workspaces = this.getWorkspaces();
+                    const exists = workspaces.some(ws => ws.workspaceId === newWorkspace.workspaceId);
+                    if (!exists) {
+                        workspaces.push(newWorkspace);
+                        this.set('workspaces', workspaces);
+                    }
+                }
+            }
+        };
+
+        // 页面加载时初始化数据
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            renderWorkspaces();
+        });
+
+        // 加载用户数据
+        function loadUserData() {
+            const userEmail = CacheManager.getUserEmail();
+            const userPassword = CacheManager.getUserPassword();
+            
+            if (!userEmail || !userPassword) {
+                // 使用默认数据
+                displayUserInfo('kobe', 'kobe.manba@out');
+                return;
+            }
+            
+            // 调用登录API获取最新数据
+            const body = new URLSearchParams();
+            body.set('email', userEmail);
+            body.set('password', userPassword);
+            
+            fetch(getApiUrl(API_ENDPOINTS.USER_LOGIN), {
+                method: 'POST',
+                body: body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.userId) {
+                    // 更新缓存数据
+                    const userData = {
+                        userId: data.userId,
+                        username: data.username,
+                        email: data.email,
+                        introduction: data.introduction,
+                        workspaces: data.workspaces,
+                        password: userPassword
+                    };
+                    CacheManager.updateUserData(userData);
+                    
+                    // 更新本地变量
+                    userId = data.userId;
+                    workspaces = data.workspaces || [];
+                    
+                    // 显示用户信息
+                    displayUserInfo(data.username, data.email);
+                } else {
+                    // 使用默认数据
+                    displayUserInfo('kobe', 'kobe.manba@out');
+                }
+            })
+            .catch(error => {
+                console.error('加载用户数据失败:', error);
+                // 使用默认数据
+                displayUserInfo('kobe', 'kobe.manba@out');
+            });
+        }
+
+        // 显示用户信息
+        function displayUserInfo(username, email) {
+            document.getElementById('displayUserName').textContent = username;
+            document.getElementById('displayUserEmail').textContent = email;
+            document.getElementById('currentUsername').textContent = username;
+            document.getElementById('currentEmail').textContent = email;
+        }
+
+        // 渲染workspaces数据
+        function renderWorkspaces() {
+            const sidebarGroupList = document.getElementById('sidebarGroupList');
+            
+            // 清空现有的动态群组
+            sidebarGroupList.innerHTML = '';
+            
+            // 获取最新的workspaces数据
+            workspaces = CacheManager.getWorkspaces();
+            
+            // 添加workspaces中的群组
+            workspaces.forEach(workspace => {
+                const sidebarGroupItem = createGroupItem(workspace.name, workspace.workspaceId);
+                sidebarGroupList.appendChild(sidebarGroupItem);
+            });
+        }
+
+        // 创建群组列表项
+        function createGroupItem(groupName, groupId) {
+            const li = document.createElement('li');
+            li.className = 'group-item';
+            li.onclick = function() { goToGroup(groupName, groupId); };
+            
+            li.innerHTML = `
+                <span class="group-icon">👥</span>
+                <span>${groupName}</span>
+            `;
+            
+            return li;
+        }
+
+        // 跳转到Dashboard页面
+        function goToDashboard() {
+            window.location.href = 'Dashboard.html';
+        }
+
+        // 跳转到消息页面
+        function goToMessagePage() {
+            window.location.href = 'Dashboard.html#message';
+        }
+
+        // 跳转到群组
+        function goToGroup(groupName, groupId) {
+            window.location.href = `Dashboard.html#group-${groupId}`;
+        }
+
+        // 显示修改用户名弹窗
+        function showChangeUsernameModal() {
+            const modal = document.getElementById('changeUsernameModal');
+            modal.classList.add('show');
+        }
+
+        // 隐藏修改用户名弹窗
+        function hideChangeUsernameModal() {
+            const modal = document.getElementById('changeUsernameModal');
+            modal.classList.remove('show');
+            document.getElementById('changeUsernameForm').reset();
+        }
+
+        // 显示修改邮箱弹窗
+        function showChangeEmailModal() {
+            const modal = document.getElementById('changeEmailModal');
+            const oldEmail = CacheManager.getUserEmail();
+            document.getElementById('oldEmail').value = oldEmail || '';
+            modal.classList.add('show');
+        }
+
+        // 隐藏修改邮箱弹窗
+        function hideChangeEmailModal() {
+            const modal = document.getElementById('changeEmailModal');
+            modal.classList.remove('show');
+            document.getElementById('changeEmailForm').reset();
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+
+        // 倒计时功能
+        function startCountdown() {
+            const getCodeBtn = document.getElementById('getCodeBtn');
+            getCodeBtn.disabled = true;
+            remain = 60;
+            getCodeBtn.textContent = '重新发送 (' + remain + 's)';
+            timer = setInterval(function () {
+                remain -= 1;
+                if (remain <= 0) {
+                    clearInterval(timer);
+                    getCodeBtn.disabled = false;
+                    getCodeBtn.textContent = '获取验证码';
+                } else {
+                    getCodeBtn.textContent = '重新发送 (' + remain + 's)';
+                }
+            }, 1000);
+        }
+
+        // 获取验证码
+        document.getElementById('getCodeBtn').addEventListener('click', function() {
+            const oldEmail = document.getElementById('oldEmail').value.trim();
+            if (!oldEmail) {
+                alert('请先输入当前邮箱');
+                return;
+            }
+            
+            const body = new URLSearchParams();
+            body.set('email', oldEmail);
+
+            fetch(getApiUrl(API_ENDPOINTS.USER_SEND_VERIFICATION_CODE), {
+                method: 'POST',
+                body: body
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('验证码已发送到您的邮箱');
+                    startCountdown();
+                } else {
+                    alert('发送验证码失败，请稍后重试');
+                }
+            })
+            .catch(error => {
+                console.error('发送验证码失败:', error);
+                alert('网络错误，请稍后重试');
+            });
+        });
+
+        // 处理修改用户名表单提交
+        document.getElementById('changeUsernameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newUsername = document.getElementById('newUsername').value.trim();
+            const email = CacheManager.getUserEmail();
+            
+            if (!newUsername) {
+                alert('请输入新用户名');
+                return;
+            }
+            
+            if (!email) {
+                alert('用户邮箱信息缺失，请重新登录');
+                return;
+            }
+            
+            const body = new URLSearchParams();
+            body.append('email', email);
+            body.append('newusername', newUsername);
+
+            fetch(getApiUrl(API_ENDPOINTS.USER_CHANGE_USERNAME), {
+                method: 'POST',
+                body: body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message && data.message.includes('成功')) {
+                    // 更新缓存
+                    const userData = CacheManager.getUserData();
+                    if (userData) {
+                        userData.username = newUsername;
+                        CacheManager.updateUserData(userData);
+                    }
+                    
+                    // 刷新页面显示
+                    displayUserInfo(newUsername, email);
+                    
+                    hideChangeUsernameModal();
+                    alert(data.message || '用户名修改成功');
+                } else {
+                    alert(data.error || '用户名修改失败');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('网络错误，请稍后重试');
+            });
+        });
+
+        // 处理修改邮箱表单提交
+        document.getElementById('changeEmailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const oldEmail = document.getElementById('oldEmail').value.trim();
+            const newEmail = document.getElementById('newEmail').value.trim();
+            const verificationCode = document.getElementById('verificationCode').value.trim();
+            
+            if (!oldEmail || !newEmail || !verificationCode) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            const body = new URLSearchParams();
+            body.append('oldEmail', oldEmail);
+            body.append('newEmail', newEmail);
+            body.append('verificationCode', verificationCode);
+
+            fetch(getApiUrl(API_ENDPOINTS.USER_CHANGE_EMAIL), {
+                method: 'POST',
+                body: body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message && data.message.includes('成功')) {
+                    // 更新缓存
+                    const userData = CacheManager.getUserData();
+                    if (userData) {
+                        userData.email = newEmail;
+                        CacheManager.updateUserData(userData);
+                    }
+                    
+                    // 刷新页面显示
+                    displayUserInfo(userData.username, newEmail);
+                    
+                    hideChangeEmailModal();
+                    alert(data.message || '邮箱修改成功');
+                } else {
+                    alert(data.error || '邮箱修改失败');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('网络错误，请稍后重试');
+            });
+        });
+
+        // 登出功能
+        function logout() {
+            if (confirm('确定要登出吗？')) {
+                // 清除所有缓存数据
+                try {
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('workspaces');
+                    localStorage.removeItem('userData');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userIntroduction');
+                } catch (e) {
+                    console.error('清除缓存失败:', e);
+                }
+                
+                // 跳转到登录页面
+                window.location.href = 'Login.html';
+            }
+        }
+
+        // 点击弹窗背景关闭弹窗
+        document.getElementById('changeUsernameModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideChangeUsernameModal();
+            }
+        });
+
+        document.getElementById('changeEmailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideChangeEmailModal();
+            }
+        });
+
+        // 显示新增群组弹窗
+        function showAddGroupModal() {
+            const modal = document.getElementById('addGroupModal');
+            modal.classList.add('show');
+        }
+
+        // 隐藏新增群组弹窗
+        function hideAddGroupModal() {
+            const modal = document.getElementById('addGroupModal');
+            modal.classList.remove('show');
+            // 清空表单
+            document.getElementById('addGroupForm').reset();
+        }
+
+        // 创建新群组
+        function createNewGroup(groupData, newWorkspaceId) {
+            const newWorkspace = {
+                workspaceId: newWorkspaceId,
+                name: groupData.name,
+                ownerId: groupData.ownerId // 保存群主ID
+            };
+            
+            // 添加到侧边栏
+            const sidebarGroupItem = createGroupItem(groupData.name, newWorkspaceId);
+            document.getElementById('sidebarGroupList').appendChild(sidebarGroupItem);
+            
+            // 使用缓存管理器添加新工作空间
+            CacheManager.addWorkspace(newWorkspace);
+            
+            // 更新本地workspaces数组
+            workspaces = CacheManager.getWorkspaces();
+        }
+
+        // 处理新增群组表单提交
+        document.getElementById('addGroupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const groupData = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                ownerId: CacheManager.getUserIdAsLong()
+            };
+            
+            // 验证输入
+            if (!groupData.name.trim()) {
+                alert('请输入群组名称');
+                return;
+            }
+            
+            if (!groupData.ownerId || isNaN(groupData.ownerId)) {
+                alert('用户ID无效，请重新登录');
+                return;
+            }
+            
+            // 发送POST请求到后端（URLSearchParams 与后端一致）
+            const body = new URLSearchParams();
+            body.append('name', groupData.name);
+            if (groupData.description && groupData.description.trim()) {
+                body.append('description', groupData.description);
+            }
+            body.append('ownerId', groupData.ownerId);
+
+            fetch(getApiUrl(API_ENDPOINTS.WORKSPACE_CREATE), {
+                method: 'POST',
+                body: body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success || data.workspaceId) {
+                    // 创建成功，添加新群组到界面
+                    const newWorkspaceId = data.workspaceId || data.id || data.workspace?.workspaceId;
+                    createNewGroup(groupData, newWorkspaceId);
+                    
+                    // 重新渲染页面以显示新群组
+                    renderWorkspaces();
+                    
+                    hideAddGroupModal();
+                    alert('群组创建成功！');
+                } else {
+                    alert(data.error || '创建群组失败');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('网络错误，请稍后重试');
+            });
+        });
+
+        // 点击弹窗背景关闭新增群组弹窗
+        document.getElementById('addGroupModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideAddGroupModal();
+            }
+        });
+    </script>
+    <script src="config.js"></script>
+</body>
+</html>
+
