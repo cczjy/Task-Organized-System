@@ -90,7 +90,6 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
       ```
 
 3.  **Build and Run**
-    in the main folder run the following code:
     ```bash
     ./gradlew bootRun
     ```
