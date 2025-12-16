@@ -90,11 +90,13 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
       ```
 
 3.  **Build and Run**
+
+    in `running_server` folder
     ```bash
     java -jar demo-0.0.1-SNAPSHOT.jar
     ```
 
-4.  **Access the Application**
+5.  **Access the Application**
     - The backend will start on `http://localhost:8080`.
     - Open the frontend `index.html` (or serve via a simple HTTP server) to interact with the API.
 
