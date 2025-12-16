@@ -92,7 +92,7 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 3.  **Build and Run**
     in the main folder run the following code:
     ```bash
-        java -jar demo-0.0.1-SNAPSHOT.jar
+    ./gradlew bootRun
     ```
 
 5.  **Access the Application**
