@@ -13,6 +13,7 @@ In an era of remote work and complex cross-functional projects, traditional tool
 
 Built with a robust **Java Spring Boot** backend and a performance-oriented **Vanilla JavaScript** frontend, the system distinguishes itself with a unique **Dual-Status Tracking System** (tracking both individual member progress and overall task completion).
 
+![结构图](E897212F3E5FDB756C6A26EF8AFDD99A.png)
 ## ✨ Key Features
 
 ### 👥 User & Workspace Management
@@ -121,27 +122,22 @@ Retrieves the 5 most recent tasks assigned to the user that are not yet "DONE".
   ]
 ### 2. Get Task Details
 Returns detailed information. The structure adapts based on the taskType (e.g., includes options for VOTES, file info for DOCUMENTS).
-Endpoint: GET /api/tasks/{taskId}
-Response (Vote Task Example):
-code
-JSON
-{
-  "taskId": 206,
-  "title": "Team Building Location",
-  "taskType": "VOTE",
-  "options": [
-    { "optionId": 10, "content": "Beach", "voteCount": 3 },
-    { "optionId": 11, "content": "Mountains", "voteCount": 5 }
-  ]
-}
-3. Download File
-Endpoint: GET /api/files/download/{fileId}
-Headers: Returns Content-Disposition: attachment.
-👥 Contributors
-Chang Zhong (Fuzhou University)
-Ye Huang (Fuzhou University)
-Jiansong Zhou (Fuzhou University)
-Zijun Gao (Fuzhou University)
-Jingyi Cai (Fuzhou University)
-📄 License
+- **Endpoint**: `GET /api/tasks/{taskId}`
+- **Response** (Vote Task Example):
+    ```json
+    [
+        {
+          "taskId": 206,
+          "title": "Team Building Location",
+          "taskType": "VOTE",
+          "options": [
+            { "optionId": 10, "content": "Beach", "voteCount": 3 },
+            { "optionId": 11, "content": "Mountains", "voteCount": 5 }
+          ]
+        }
+    ]
+### 3. Download File
+- **Endpoint**: `GET /api/files/download/{fileId}`
+- **Headers**: Returns Content-Disposition: attachment.
+## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
