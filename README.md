@@ -76,7 +76,7 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/your-username/collaborative-task-platform.git
+    git clone [https://github.com/cczjy/Task-Organized-System.git](https://github.com/cczjy/Task-Organized-System.git)
     cd collaborative-task-platform
     ```
 
