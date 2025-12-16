@@ -75,10 +75,6 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 ### Installation
 
 1.  **Clone the repository**
-    ```bash
-    git clone [https://github.com/cczjy/Task-Organized-System.git](https://github.com/cczjy/Task-Organized-System.git)
-    cd collaborative-task-platform
-    ```
 
 2.  **Configure the Database**
     - Create a PostgreSQL database named `task_db` (or update `application.properties`).
@@ -94,12 +90,13 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
       ```
 
 3.  **Build and Run**
+    in the main folder run the following code:
     ```bash
-    ./gradlew bootRun
+        java -jar demo-0.0.1-SNAPSHOT.jar
     ```
 
-4.  **Access the Application**
-    - The backend will start on `http://localhost:8080`.
+5.  **Access the Application**
+    - The backend will start on `http://localhost:8081`.
     - Open the frontend `index.html` (or serve via a simple HTTP server) to interact with the API.
 
 ## 🔌 API Documentation Examples
