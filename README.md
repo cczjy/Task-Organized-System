@@ -75,10 +75,6 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 ### Installation
 
 1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/your-username/collaborative-task-platform.git
-    cd collaborative-task-platform
-    ```
 
 2.  **Configure the Database**
     - Create a PostgreSQL database named `task_db` (or update `application.properties`).
@@ -95,7 +91,7 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 
 3.  **Build and Run**
     ```bash
-    ./gradlew bootRun
+    java -jar demo-0.0.1-SNAPSHOT.jar
     ```
 
 4.  **Access the Application**
