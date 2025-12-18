@@ -99,6 +99,7 @@ The project follows a **Three-Tier Architecture** to ensure maintainability and 
 5.  **Access the Application**
     - The backend will start on `http://localhost:8080`.
     - Open the frontend `index.html` (or serve via a simple HTTP server) to interact with the API.
+    - You can acess the html page in the web through `http://localhost:8080/Login.html`
 
 ## 🔌 API Documentation Examples
 
